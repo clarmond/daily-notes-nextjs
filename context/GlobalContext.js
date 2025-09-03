@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { getPreviousTasks } from "@/app/actions/tasks";
+import { getCurrentTasks, getPreviousTasks } from "@/app/actions/tasks";
 
 const GlobalContext = createContext();
 
@@ -10,6 +10,7 @@ export function GlobalProvider({ children }) {
   const [previousItems, setPreviousItems] = useState([]);
 
   useEffect(() => {
+    getCurrentTasks().then((items) => setCurrentItems(items));
     getPreviousTasks().then((items) => setPreviousItems(items));
   }, []);
 
