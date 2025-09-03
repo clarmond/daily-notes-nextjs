@@ -10,7 +10,7 @@ const BoxList = (props) => {
     const { editable, defaultChecked, action } = props.config;
     if (isLoaded === false) {
         return (
-            <div className="text-center">Loading...</div>
+            <div className="font-italic text-center text-muted">Loading...</div>
         )
     }
     return (
@@ -29,7 +29,7 @@ const BoxList = (props) => {
                     )
                 })
             ) : (
-                <div className="box-list-no-items">No items yet</div>
+                <div className="box-list-no-items">No items</div>
             )}
             {editable && <ListInput placeholder="Add new item" action={action} />}
         </ul>
