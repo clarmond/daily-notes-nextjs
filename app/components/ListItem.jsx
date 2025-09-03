@@ -5,7 +5,7 @@ import { FaStickyNote } from "react-icons/fa";
 const ListItem = ({ id, defaultChecked, editable, text, note }) => {
     const checkboxID = `checkbox-${id}`;
     return (
-        <li className="list-group-item lighter">
+        <li key={id} className="list-group-item lighter">
             {note === 1 &&
                 <FaStickyNote />
             }
@@ -15,7 +15,6 @@ const ListItem = ({ id, defaultChecked, editable, text, note }) => {
                     type="checkbox"
                     defaultChecked={defaultChecked}
                     disabled={!editable}
-                    onClick={(e) => { clickHandler(e, id) }}
                 />
             }
             &nbsp;

@@ -9,6 +9,7 @@ const TodaysDoneBox = (props) => {
         sortable: false,
         showTimestamps: false,
         defaultChecked: true,
+        saveAction: 'new',
     }
     const listItems = [];
     return (

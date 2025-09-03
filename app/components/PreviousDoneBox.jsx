@@ -1,7 +1,17 @@
+'use server';
+import connectDB from '@/config/db';
+import Task from '@/models/Task';
+
 import Box from './Box';
 import { FaCalendarCheck } from 'react-icons/fa';
 
-const PreviousDoneBox = (props) => {
+const PreviousDoneBox = async (props) => {
+    await connectDB();
+
+    const listItems = await Task.find({})
+        .limit(5)
+        .lean();
+
     const config = {
         title: 'Previous Day\'s Accomplishments and Notes',
         icon: FaCalendarCheck(),
@@ -10,7 +20,6 @@ const PreviousDoneBox = (props) => {
         showTimestamps: true,
         defaultChecked: true,
     };
-    const listItems = [];
     return (
         <Box config={config} listItems={listItems} />
     )

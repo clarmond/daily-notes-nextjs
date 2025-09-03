@@ -1,9 +1,14 @@
-import { FaPenSquare } from "react-icons/fa";
+'use client';
 
-const ListInput = ({ newItemHandler, placeholder }) => {
-    const keyPressed = (e) => {
+import { FaPenSquare } from "react-icons/fa";
+import { saveNewTask } from "../actions/tasks";
+
+const ListInput = ({ placeholder, action }) => {
+    const keyPressed = async (e) => {
         if (e.keyCode === 13) {
-            newItemHandler(e.target.value);
+            if (action === 'saveNew') {
+                saveNewTask(e.target.value);
+            }
             e.target.value = '';
         }
     }
@@ -12,7 +17,7 @@ const ListInput = ({ newItemHandler, placeholder }) => {
         <li className="list-group-item lighter">
             <FaPenSquare />
             &nbsp;
-            <input placeholder={placeholder} className="input-box new-item-input" onKeyDown={keyPressed} />
+            <input placeholder={placeholder} className="input-box new-item-input" onKeyUp={keyPressed} />
         </li>
     )
 };

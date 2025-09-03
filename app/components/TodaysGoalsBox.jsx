@@ -1,7 +1,9 @@
 import Box from "./Box";
 import { FaList } from 'react-icons/fa';
+// import { useState } from "react";
 
 const TodaysGoalsBox = (props) => {
+  // const [listItems, setListItems] = useState([]);
   const config = {
     title: 'Today\'s Tasks and Goals',
     icon: FaList(),
@@ -9,6 +11,7 @@ const TodaysGoalsBox = (props) => {
     sortable: true,
     showTimestamps: false,
     defaultChecked: false,
+    action: 'saveNew'
   };
   const listItems = [];
   return (
