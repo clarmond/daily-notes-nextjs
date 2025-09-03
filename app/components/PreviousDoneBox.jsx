@@ -1,16 +1,13 @@
-'use server';
-import connectDB from '@/config/db';
-import Task from '@/models/Task';
+'use client';
+
+import { useGlobalContext } from '@/context/GlobalContext';
 
 import Box from './Box';
 import { FaCalendarCheck } from 'react-icons/fa';
 
-const PreviousDoneBox = async (props) => {
-    await connectDB();
-
-    const listItems = await Task.find({})
-        .limit(5)
-        .lean();
+const PreviousDoneBox = (props) => {
+    const { previousItems } = useGlobalContext();
+    const listItems = previousItems;
 
     const config = {
         title: 'Previous Day\'s Accomplishments and Notes',
