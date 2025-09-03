@@ -1,5 +1,7 @@
 "use server";
 
+//TODO: Add try/cath blocks
+
 import { convertToSerialObject } from "@/utils/convertToObject";
 
 import { revalidatePath } from "next/cache";
@@ -15,6 +17,25 @@ export async function saveNewTask(text) {
   revalidatePath("/", "layout");
 }
 
+export async function getCurrentTasks() {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999);
+
+  const listItems = await Task.find({
+    createdAt: {
+      $gte: startOfToday,
+      $lt: endOfToday,
+    },
+  }).lean();
+
+  const items = listItems.map((item) => convertToSerialObject(item));
+
+  return items;
+}
+
 export async function getPreviousTasks() {
   await connectDB();
 
@@ -22,4 +43,8 @@ export async function getPreviousTasks() {
   const items = listItems.map((item) => convertToSerialObject(item));
 
   return items;
+}
+
+export async function toggleTask(id) {
+  await connectDB();
 }
