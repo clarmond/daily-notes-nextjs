@@ -1,6 +1,6 @@
 "use server";
 
-import { convertToSerializeableObject } from "@/utils/convertToObject";
+import { convertToSerialObject } from "@/utils/convertToObject";
 
 import { revalidatePath } from "next/cache";
 import connectDB from "@/config/db";
@@ -19,7 +19,7 @@ export async function getPreviousTasks() {
   await connectDB();
 
   const listItems = await Task.find({}).limit(5).lean();
-  const items = listItems.map((item) => convertToSerializeableObject(item));
+  const items = listItems.map((item) => convertToSerialObject(item));
 
   return items;
 }

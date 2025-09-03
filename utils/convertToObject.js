@@ -5,7 +5,7 @@
  * @returns {Object} A plain JavaScript object that is a serializable representation of the input document.
  */
 
-export function convertToSerializeableObject(leanDocument) {
+export function convertToSerialObject(leanDocument) {
   for (const key of Object.keys(leanDocument)) {
     if (leanDocument[key].toJSON && leanDocument[key].toString)
       leanDocument[key] = leanDocument[key].toString();
