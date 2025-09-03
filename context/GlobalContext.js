@@ -8,10 +8,18 @@ const GlobalContext = createContext();
 export function GlobalProvider({ children }) {
   const [currentItems, setCurrentItems] = useState([]);
   const [previousItems, setPreviousItems] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    getCurrentTasks().then((items) => setCurrentItems(items));
-    getPreviousTasks().then((items) => setPreviousItems(items));
+    const currentTasksPromise = getCurrentTasks();
+    const previousTasksPromise = getPreviousTasks();
+    Promise.allSettled([currentTasksPromise, previousTasksPromise]).then(
+      (results) => {
+        setCurrentItems(results[0].value);
+        setPreviousItems(results[1].value);
+        setIsLoaded(true);
+      }
+    );
   }, []);
 
   return (
@@ -21,6 +29,8 @@ export function GlobalProvider({ children }) {
         setCurrentItems,
         previousItems,
         setPreviousItems,
+        isLoaded,
+        setIsLoaded,
       }}
     >
       {children}
