@@ -67,3 +67,9 @@ export async function updateCompletion(id, isComplete) {
   item.is_completed = isComplete;
   item.save();
 }
+
+export async function deleteItem(id) {
+  await connectDB();
+
+  const result = await Task.findByIdAndDelete(id);
+}
