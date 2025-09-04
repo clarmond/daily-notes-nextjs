@@ -12,10 +12,12 @@ startOfToday.setHours(0, 0, 0, 0);
 const endOfToday = new Date();
 endOfToday.setHours(23, 59, 59, 999);
 
-export async function saveNewTask(text) {
+export async function saveNewTask(text, is_completed = false, is_note = false) {
   await connectDB();
 
   const task = new Task({ text });
+  task.is_completed = is_completed;
+  task.is_note = is_note;
   const results = await task.save();
 
   return JSON.stringify(results);
