@@ -28,3 +28,8 @@ h1 {
 .box-list-no-items {
   padding-bottom: 6px;
 }
+.timestamp {
+  color: #999;
+  font-size: small;
+  padding-left: 20px;
+}
