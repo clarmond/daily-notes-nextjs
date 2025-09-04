@@ -3,10 +3,14 @@
 //TODO: Add try/catch blocks
 
 import { convertToSerialObject } from "@/utils/convertToObject";
-
-import { revalidatePath } from "next/cache";
 import connectDB from "@/config/db";
 import Task from "@/models/Task";
+
+const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
+const endOfToday = new Date();
+endOfToday.setHours(23, 59, 59, 999);
 
 export async function saveNewTask(text) {
   await connectDB();
@@ -18,12 +22,6 @@ export async function saveNewTask(text) {
 }
 
 export async function getCurrentTasks() {
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
-
-  const endOfToday = new Date();
-  endOfToday.setHours(23, 59, 59, 999);
-
   const listItems = await Task.find({
     createdAt: {
       $gte: startOfToday,
@@ -39,7 +37,24 @@ export async function getCurrentTasks() {
 export async function getPreviousTasks() {
   await connectDB();
 
-  const listItems = await Task.find({}).limit(5).lean();
+  const previousDayCheck = await Task.findOne({
+    createdAt: {
+      $lt: startOfToday,
+    },
+  }).sort({ createdAt: -1 });
+
+  const previousDayStart = new Date(previousDayCheck.createdAt);
+  previousDayStart.setHours(0, 0, 0, 0);
+
+  const previousDayEnd = new Date(previousDayCheck.createdAt);
+  previousDayEnd.setHours(23, 59, 59, 999);
+
+  const listItems = await Task.find({
+    createdAt: {
+      $gte: previousDayStart,
+      $lt: previousDayEnd,
+    },
+  }).lean();
   const items = listItems.map((item) => convertToSerialObject(item));
 
   return items;
