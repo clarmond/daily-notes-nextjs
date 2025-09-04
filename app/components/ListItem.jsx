@@ -5,8 +5,9 @@
 import { useGlobalContext } from '@/context/GlobalContext';
 import { FaStickyNote } from "react-icons/fa";
 import { updateCompletion } from '../actions/tasks';
+import dayjs from 'dayjs';
 
-const ListItem = ({ id, defaultChecked, editable, text, note }) => {
+const ListItem = ({ id, defaultChecked, editable, text, note, showTimestamps, timestamp }) => {
     const checkboxID = `checkbox-${id}`;
 
     const { currentItems, setCurrentItems } = useGlobalContext();
@@ -38,6 +39,10 @@ const ListItem = ({ id, defaultChecked, editable, text, note }) => {
             }
             &nbsp;
             <label htmlFor={checkboxID}>{text}</label>
+            {
+                showTimestamps &&
+                <div className="timestamp">{timestamp.toLocaleString()}</div>
+            }
             {/* <DeleteButton id={id} /> */}
         </li>
     )

@@ -7,7 +7,7 @@ import ListInput from "./ListInput";
 const BoxList = (props) => {
     const { isLoaded } = useGlobalContext();
     const { listItems } = props;
-    const { editable, defaultChecked, action } = props.config;
+    const { editable, defaultChecked, action, showTimestamps } = props.config;
     if (isLoaded === false) {
         return (
             <div className="font-italic text-center text-muted">Loading...</div>
@@ -24,6 +24,8 @@ const BoxList = (props) => {
                             text={item.text}
                             defaultChecked={defaultChecked}
                             editable={editable}
+                            showTimestamps={showTimestamps}
+                            timestamp={item.createdAt}
                             note={item.note}
                         />
                     )
