@@ -2,14 +2,19 @@
 
 import { FaPenSquare } from "react-icons/fa";
 import { saveNewTask } from "../actions/tasks";
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const ListInput = ({ placeholder, action }) => {
+    const { currentItems, setCurrentItems } = useGlobalContext();
+
     const keyPressed = async (e) => {
         if (e.keyCode === 13) {
             if (action === 'saveNew') {
-                saveNewTask(e.target.value);
+                const results = await saveNewTask(e.target.value);
+                const updatedItems = [...currentItems, JSON.parse(results)];
+                setCurrentItems(updatedItems);
+                e.target.value = '';
             }
-            e.target.value = '';
         }
     }
 
@@ -20,5 +25,7 @@ const ListInput = ({ placeholder, action }) => {
             <input placeholder={placeholder} className="input-box new-item-input" onKeyUp={keyPressed} />
         </li>
     )
-};
+
+}
+
 export default ListInput;

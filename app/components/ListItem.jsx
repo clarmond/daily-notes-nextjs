@@ -4,17 +4,19 @@
 // import EditButton from '../edit-button/edit-button.component';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { FaStickyNote } from "react-icons/fa";
+import { updateCompletion } from '../actions/tasks';
 
 const ListItem = ({ id, defaultChecked, editable, text, note }) => {
     const checkboxID = `checkbox-${id}`;
 
     const { currentItems, setCurrentItems } = useGlobalContext();
 
-    function markAsComplete() {
+    async function markAsComplete() {
         const updatedItems = [...currentItems];
-        updatedItems.map(item => {
+        updatedItems.map(async (item) => {
             if (item._id === id) {
                 item.is_completed = !item.is_completed;
+                await updateCompletion(id, item.is_completed);
             }
         });
         setCurrentItems(updatedItems);

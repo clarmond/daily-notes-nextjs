@@ -1,6 +1,6 @@
 "use server";
 
-//TODO: Add try/cath blocks
+//TODO: Add try/catch blocks
 
 import { convertToSerialObject } from "@/utils/convertToObject";
 
@@ -12,9 +12,9 @@ export async function saveNewTask(text) {
   await connectDB();
 
   const task = new Task({ text });
-  task.save();
+  const results = await task.save();
 
-  revalidatePath("/", "layout");
+  return JSON.stringify(results);
 }
 
 export async function getCurrentTasks() {
@@ -45,6 +45,10 @@ export async function getPreviousTasks() {
   return items;
 }
 
-export async function toggleTask(id) {
+export async function updateCompletion(id, isComplete) {
   await connectDB();
+
+  const item = await Task.findById(id);
+  item.is_completed = isComplete;
+  item.save();
 }
