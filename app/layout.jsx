@@ -24,7 +24,10 @@ export default function RootLayout({ children }) {
           integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
           crossOrigin="anonymous"
         ></script>
-        <body>{children}</body>
+        <body>
+          <h1 className="text-center">Daily Notes</h1>
+          {children}
+        </body>
       </html>
     </GlobalProvider>
   );
