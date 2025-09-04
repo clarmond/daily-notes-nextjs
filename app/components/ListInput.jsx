@@ -15,6 +15,13 @@ const ListInput = ({ placeholder, action }) => {
                 setCurrentItems(updatedItems);
                 e.target.value = '';
             }
+            if (action === 'saveNote') {
+                console.log('Write new note')
+                const results = await saveNewTask(e.target.value, true, true);
+                const updatedItems = [...currentItems, JSON.parse(results)];
+                setCurrentItems(updatedItems);
+                e.target.value = '';
+            }
         }
     }
 

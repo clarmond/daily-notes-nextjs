@@ -14,7 +14,7 @@ const TodaysDoneBox = (props) => {
         sortable: false,
         showTimestamps: false,
         defaultChecked: true,
-        saveAction: 'new',
+        action: 'saveNote',
     }
     return (
         <Box config={config} listItems={listItems} />

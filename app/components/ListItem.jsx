@@ -5,7 +5,6 @@ import DeleteItem from './DeleteItem';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { FaStickyNote } from "react-icons/fa";
 import { updateCompletion } from '../actions/tasks';
-import dayjs from 'dayjs';
 
 const ListItem = ({ id, defaultChecked, editable, text, note, showTimestamps, timestamp }) => {
     const checkboxID = `checkbox-${id}`;
@@ -27,10 +26,10 @@ const ListItem = ({ id, defaultChecked, editable, text, note, showTimestamps, ti
         <li key={id} className="list-group-item lighter">
             <div className="d-flex align-items-center">
                 <div className="w-100">
-                    {note === 1 &&
+                    {note === true &&
                         <FaStickyNote />
                     }
-                    {note !== 1 &&
+                    {note === false &&
                         <input
                             id={checkboxID}
                             type="checkbox"

@@ -26,7 +26,7 @@ const BoxList = (props) => {
                             editable={editable}
                             showTimestamps={showTimestamps}
                             timestamp={item.createdAt}
-                            note={item.note}
+                            note={item.is_note}
                         />
                     )
                 })
