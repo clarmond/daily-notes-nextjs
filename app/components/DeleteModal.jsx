@@ -9,8 +9,7 @@ const DeleteModal = () => {
     async function deleteAction() {
         await deleteItem(currentId);
 
-        const updatedItems = [...currentItems];
-        updatedItems.filter(item => item._id !== currentId);
+        const updatedItems = [...currentItems].filter(item => item._id != currentId);
         setCurrentItems(updatedItems);
     }
 
