@@ -1,6 +1,6 @@
 'use client';
 
-// import DeleteButton from '../delete-button/delete-button.component';
+import DeleteItem from './DeleteItem';
 // import EditButton from '../edit-button/edit-button.component';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { FaStickyNote } from "react-icons/fa";
@@ -25,26 +25,33 @@ const ListItem = ({ id, defaultChecked, editable, text, note, showTimestamps, ti
 
     return (
         <li key={id} className="list-group-item lighter">
-            {note === 1 &&
-                <FaStickyNote />
-            }
-            {note !== 1 &&
-                <input
-                    id={checkboxID}
-                    type="checkbox"
-                    defaultChecked={defaultChecked}
-                    disabled={!editable}
-                    onChange={markAsComplete}
-                />
-            }
-            &nbsp;
-            <label htmlFor={checkboxID}>{text}</label>
+            <div className="d-flex align-items-center">
+                <div className="w-100">
+                    {note === 1 &&
+                        <FaStickyNote />
+                    }
+                    {note !== 1 &&
+                        <input
+                            id={checkboxID}
+                            type="checkbox"
+                            defaultChecked={defaultChecked}
+                            disabled={!editable}
+                            onChange={markAsComplete}
+                        />
+                    }
+                    &nbsp;
+                    <label htmlFor={checkboxID}>{text}</label>
+                </div>
+                {
+                    editable && <DeleteItem id={id} />
+                }
+            </div>
             {
                 showTimestamps &&
                 <div className="timestamp">{timestamp.toLocaleString()}</div>
             }
             {/* <DeleteButton id={id} /> */}
-        </li>
+        </li >
     )
 };
 
