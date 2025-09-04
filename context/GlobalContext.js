@@ -9,6 +9,7 @@ export function GlobalProvider({ children }) {
   const [currentItems, setCurrentItems] = useState([]);
   const [previousItems, setPreviousItems] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [currentId, setCurrentId] = useState(0);
 
   useEffect(() => {
     const currentTasksPromise = getCurrentTasks();
@@ -31,6 +32,8 @@ export function GlobalProvider({ children }) {
         setPreviousItems,
         isLoaded,
         setIsLoaded,
+        currentId,
+        setCurrentId,
       }}
     >
       {children}
