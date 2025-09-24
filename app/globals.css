@@ -35,3 +35,14 @@ h1 {
   font-size: small;
   padding-left: 20px;
 }
+#login-box {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  padding: 40px;
+  width: 500px;
+}
