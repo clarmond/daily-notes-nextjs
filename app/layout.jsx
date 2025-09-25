@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
             crossOrigin="anonymous"
           ></script>
           <body>
-            <h1 className="text-center">Daily Notes</h1>
+            <h3 className="text-center">Daily Notes</h3>
             {children}
           </body>
         </html>
