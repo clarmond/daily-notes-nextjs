@@ -21,8 +21,8 @@ const LoginBox = ({ provider }) => {
     <>
       {providers &&
         Object.values(providers).map((provider) => (
-          <div id="login-box">
-            <LoginButton key={provider.id} provider={provider} />
+          <div id="login-box" key={provider.id}>
+            <LoginButton provider={provider} />
           </div>
         ))}
     </>
