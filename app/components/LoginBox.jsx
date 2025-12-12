@@ -1,30 +1,33 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
-import { getProviders } from 'next-auth/react';
+import { getProviders } from "next-auth/react";
 
 import LoginButton from "./LoginButton";
 
 const LoginBox = ({ provider }) => {
-    const [providers, setProviders] = useState(null);
+  const [providers, setProviders] = useState(null);
 
-    useEffect(() => {
-        const setAuthProviders = async () => {
-            const res = await getProviders();
-            console.log(res)
-            setProviders(res);
-        }
+  useEffect(() => {
+    const setAuthProviders = async () => {
+      const res = await getProviders();
+      console.log(res);
+      setProviders(res);
+    };
 
-        setAuthProviders();
-    }, []);
+    setAuthProviders();
+  }, []);
 
-    return (
-        <div id="login-box">
-            {providers && Object.values(providers).map((provider) => (
-                <LoginButton key={provider.id} provider={provider} />
-            ))}
-        </div>
-    )
-}
+  return (
+    <>
+      {providers &&
+        Object.values(providers).map((provider) => (
+          <div id="login-box">
+            <LoginButton key={provider.id} provider={provider} />
+          </div>
+        ))}
+    </>
+  );
+};
 
 export default LoginBox;
