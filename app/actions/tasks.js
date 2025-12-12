@@ -167,6 +167,35 @@ export async function getMostRecentPreviousDate() {
   return previousDayCheck.createdAt.toISOString();
 }
 
+export async function getMostRecentPreviousDateBefore(referenceDateString) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    return null;
+  }
+
+  const { userId } = sessionUser;
+
+  // Parse the reference date and set to start of day
+  const referenceDate = dayjs(referenceDateString).startOf("day").toDate();
+
+  const previousDayCheck = await Task.findOne({
+    owner: userId,
+    createdAt: {
+      $lt: referenceDate,
+    },
+  }).sort({ createdAt: -1 });
+
+  if (!previousDayCheck) {
+    return null;
+  }
+
+  // Return the date as ISO string
+  return previousDayCheck.createdAt.toISOString();
+}
+
 export async function getCompletedTasksByMonth(year, month) {
   await connectDB();
 

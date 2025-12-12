@@ -7,6 +7,23 @@ import { FaCalendarCheck } from "react-icons/fa";
 
 const PreviousDoneBox = (props) => {
   const { previousItems, previousDate, setPreviousDate } = useGlobalContext();
+
+  // If no previous date found, show a message
+  if (!previousDate) {
+    return (
+      <div className="card">
+        <div className="card-header">
+          <FaCalendarCheck />
+          &nbsp;&nbsp;
+          Previous Accomplishments and Notes
+        </div>
+        <div className="card-body text-muted">
+          No tasks found before the selected date.
+        </div>
+      </div>
+    );
+  }
+
   const listItems = previousItems;
 
   const config = {

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { getTasksByDate, getMostRecentPreviousDate } from "@/app/actions/tasks";
+import { getTasksByDate, getMostRecentPreviousDate, getMostRecentPreviousDateBefore } from "@/app/actions/tasks";
 import dayjs from "dayjs";
 
 const GlobalContext = createContext();
@@ -51,6 +51,30 @@ export function GlobalProvider({ children }) {
 
     fetchPreviousTasks();
   }, [previousDate]);
+
+  // Auto-update previousDate when selectedDate changes
+  useEffect(() => {
+    const updatePreviousDate = async () => {
+      const dateString = dayjs(selectedDate).format('YYYY-MM-DD');
+      const recentDateString = await getMostRecentPreviousDateBefore(dateString);
+
+      if (recentDateString) {
+        const newPreviousDate = new Date(recentDateString);
+        // Only update if the date actually changed to prevent unnecessary re-renders
+        setPreviousDate(prevDate => {
+          if (!prevDate || prevDate.getTime() !== newPreviousDate.getTime()) {
+            return newPreviousDate;
+          }
+          return prevDate;
+        });
+      } else {
+        // No tasks found before selected date - set to null
+        setPreviousDate(null);
+      }
+    };
+
+    updatePreviousDate();
+  }, [selectedDate]);
 
   return (
     <GlobalContext.Provider
