@@ -56,13 +56,17 @@ export default function Reports() {
 
   const sortedDates = Object.keys(tasksByDate).sort();
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="container">
       <div className="row mb-4">
         <div className="col-12">
           <div className="d-flex justify-content-between align-items-center">
             <h2 className="mb-0">Monthly Accomplishments Report</h2>
-            <div>
+            <div className="d-flex gap-2 align-items-center no-print">
               <label className="me-2">Select Month:</label>
               <input
                 type="month"
@@ -71,6 +75,13 @@ export default function Reports() {
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
               />
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={handlePrint}
+                disabled={isLoading || tasks.length === 0}
+              >
+                Print / Export PDF
+              </button>
             </div>
           </div>
         </div>
