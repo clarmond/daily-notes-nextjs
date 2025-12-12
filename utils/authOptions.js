@@ -17,6 +17,11 @@ export const authOptions = {
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 90 * 24 * 60 * 60, // 90 days in seconds
+    updateAge: 24 * 60 * 60, // Extend session every 24 hours of activity
+  },
   callbacks: {
     // Invoked on successful signin
     async signIn({ profile }) {
