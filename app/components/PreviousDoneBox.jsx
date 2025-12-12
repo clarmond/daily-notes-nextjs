@@ -1,25 +1,23 @@
-'use client';
+"use client";
 
-import { useGlobalContext } from '@/context/GlobalContext';
+import { useGlobalContext } from "@/context/GlobalContext";
 
-import Box from './Box';
-import { FaCalendarCheck } from 'react-icons/fa';
+import Box from "./Box";
+import { FaCalendarCheck } from "react-icons/fa";
 
 const PreviousDoneBox = (props) => {
-    const { previousItems } = useGlobalContext();
-    const listItems = previousItems;
+  const { previousItems } = useGlobalContext();
+  const listItems = previousItems;
 
-    const config = {
-        title: 'Previous Day\'s Accomplishments and Notes',
-        icon: FaCalendarCheck(),
-        editable: false,
-        sortable: false,
-        showTimestamps: true,
-        defaultChecked: true,
-    };
-    return (
-        <Box config={config} listItems={listItems} />
-    )
-}
+  const config = {
+    title: "Previous Accomplishments and Notes",
+    icon: FaCalendarCheck(),
+    editable: false,
+    sortable: false,
+    showTimestamps: true,
+    defaultChecked: true,
+  };
+  return <Box config={config} listItems={listItems} />;
+};
 
 export default PreviousDoneBox;
