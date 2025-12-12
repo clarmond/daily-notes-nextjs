@@ -8,7 +8,8 @@ const Box = (props) => {
 
   const handleDateChange = (e) => {
     if (onDateChange) {
-      const newDate = new Date(e.target.value);
+      // Parse date in local timezone, not UTC
+      const newDate = dayjs(e.target.value).toDate();
       onDateChange(newDate);
     }
   };
