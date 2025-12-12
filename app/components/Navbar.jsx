@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-import { useState, useEffect, useRef } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useGlobalContext } from '@/context/GlobalContext';
-import { searchTasks } from '../actions/tasks';
-import SearchResults from './SearchResults';
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { useState, useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useGlobalContext } from "@/context/GlobalContext";
+import { searchTasks } from "../actions/tasks";
+import SearchResults from "./SearchResults";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -16,7 +16,7 @@ const Navbar = () => {
   const { setSelectedDate } = useGlobalContext();
 
   // Search state
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ const Navbar = () => {
       setSearchResults(results);
       setIsLoading(false);
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
       setSearchResults([]);
       setIsLoading(false);
     }
@@ -53,14 +53,17 @@ const Navbar = () => {
   // Click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
         setShowResults(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -78,7 +81,7 @@ const Navbar = () => {
 
   // Handle key press (search on Enter)
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       performSearch();
     }
@@ -91,11 +94,11 @@ const Navbar = () => {
     setSelectedDate(taskDate);
 
     // Navigate to dashboard
-    router.push('/');
+    router.push("/");
 
     // Close search results and clear search
     setShowResults(false);
-    setSearchQuery('');
+    setSearchQuery("");
     setSearchResults([]);
   };
 
@@ -106,13 +109,15 @@ const Navbar = () => {
         <div className="navbar-nav">
           <Link
             href="/"
-            className={`nav-link ${pathname === '/' ? 'active fw-bold' : ''}`}
+            className={`nav-link ${pathname === "/" ? "active fw-bold" : ""}`}
           >
             Dashboard
           </Link>
           <Link
             href="/reports"
-            className={`nav-link ${pathname === '/reports' ? 'active fw-bold' : ''}`}
+            className={`nav-link ${
+              pathname === "/reports" ? "active fw-bold" : ""
+            }`}
           >
             Reports
           </Link>
@@ -131,6 +136,7 @@ const Navbar = () => {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onKeyDown={handleKeyDown}
+                style={{ width: '350px' }}
               />
               {showResults && (
                 <SearchResults
@@ -156,15 +162,15 @@ const Navbar = () => {
                     src={session.user.image}
                     alt="User avatar"
                     className="rounded-circle border"
-                    style={{ width: '40px', height: '40px', cursor: 'pointer' }}
+                    style={{ width: "40px", height: "40px", cursor: "pointer" }}
                   />
                 ) : (
                   <div
                     className="rounded-circle bg-secondary d-flex align-items-center justify-content-center border"
-                    style={{ width: '40px', height: '40px', cursor: 'pointer' }}
+                    style={{ width: "40px", height: "40px", cursor: "pointer" }}
                   >
                     <span className="text-white fw-bold">
-                      {session.user?.name?.charAt(0) || 'U'}
+                      {session.user?.name?.charAt(0) || "U"}
                     </span>
                   </div>
                 )}
@@ -172,21 +178,22 @@ const Navbar = () => {
               {showDropdown && (
                 <ul
                   className="dropdown-menu dropdown-menu-end show"
-                  style={{ position: 'absolute', right: 0 }}
+                  style={{ position: "absolute", right: 0 }}
                 >
                   <li>
                     <span className="dropdown-item-text">
                       <strong>{session.user?.name}</strong>
                       <br />
-                      <small className="text-muted">{session.user?.email}</small>
+                      <small className="text-muted">
+                        {session.user?.email}
+                      </small>
                     </span>
                   </li>
-                  <li><hr className="dropdown-divider" /></li>
                   <li>
-                    <button
-                      className="dropdown-item"
-                      onClick={handleLogout}
-                    >
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <button className="dropdown-item" onClick={handleLogout}>
                       Logout
                     </button>
                   </li>
