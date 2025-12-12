@@ -1,6 +1,7 @@
 import "./globals.css";
-import { GlobalProvider } from '@/context/GlobalContext';
+import { GlobalProvider } from "@/context/GlobalContext";
 import AuthProvider from "./components/AuthProvider";
+import Navbar from "./components/Navbar";
 
 export const metadata = {
   title: "Daily Notes",
@@ -27,8 +28,10 @@ export default function RootLayout({ children }) {
             crossOrigin="anonymous"
           ></script>
           <body>
-            <h3 className="text-center">Daily Notes</h3>
-            {children}
+            <Navbar />
+            <div className="main-content">
+              {children}
+            </div>
           </body>
         </html>
       </AuthProvider>
