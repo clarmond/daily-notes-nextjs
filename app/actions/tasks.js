@@ -29,7 +29,6 @@ export async function saveNewTask(text, is_completed = false, is_note = false) {
   task.owner = userId;
   task.is_completed = is_completed;
   task.is_note = is_note;
-  console.log(task);
   const results = await task.save();
 
   return JSON.stringify(results);
@@ -123,8 +122,8 @@ export async function getTasksByDate(dateString) {
 
   // Parse the date and create start/end boundaries
   const selectedDate = dayjs(dateString);
-  const startOfDay = selectedDate.startOf('day').toDate();
-  const endOfDay = selectedDate.endOf('day').toDate();
+  const startOfDay = selectedDate.startOf("day").toDate();
+  const endOfDay = selectedDate.endOf("day").toDate();
 
   const listItems = await Task.find({
     owner: userId,
@@ -180,8 +179,8 @@ export async function getCompletedTasksByMonth(year, month) {
   const { userId } = sessionUser;
 
   // Create start and end dates for the month
-  const startOfMonth = dayjs(`${year}-${month}-01`).startOf('month').toDate();
-  const endOfMonth = dayjs(`${year}-${month}-01`).endOf('month').toDate();
+  const startOfMonth = dayjs(`${year}-${month}-01`).startOf("month").toDate();
+  const endOfMonth = dayjs(`${year}-${month}-01`).endOf("month").toDate();
 
   const listItems = await Task.find({
     owner: userId,
@@ -217,7 +216,7 @@ export async function searchTasks(searchQuery) {
 
   const listItems = await Task.find({
     owner: userId,
-    text: { $regex: searchQuery.trim(), $options: 'i' }
+    text: { $regex: searchQuery.trim(), $options: "i" },
   })
     .sort({ createdAt: -1 })
     .limit(20)
