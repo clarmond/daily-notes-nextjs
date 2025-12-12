@@ -198,3 +198,32 @@ export async function getCompletedTasksByMonth(year, month) {
 
   return items;
 }
+
+export async function searchTasks(searchQuery) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    return [];
+  }
+
+  const { userId } = sessionUser;
+
+  // Return empty array if search query is empty or too short
+  if (!searchQuery || searchQuery.trim().length < 2) {
+    return [];
+  }
+
+  const listItems = await Task.find({
+    owner: userId,
+    text: { $regex: searchQuery.trim(), $options: 'i' }
+  })
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .lean();
+
+  const items = listItems.map((item) => convertToSerialObject(item));
+
+  return items;
+}
