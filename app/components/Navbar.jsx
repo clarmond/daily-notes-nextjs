@@ -21,19 +21,13 @@ const Navbar = () => {
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const searchContainerRef = useRef(null);
-  const searchTimeoutRef = useRef(null);
 
   const handleLogout = () => {
     signOut();
   };
 
-  // Debounced search effect
-  useEffect(() => {
-    // Clear previous timeout
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-
+  // Perform search
+  const performSearch = async () => {
     // Don't search if query is too short
     if (searchQuery.trim().length < 2) {
       setSearchResults([]);
@@ -45,25 +39,16 @@ const Navbar = () => {
     setIsLoading(true);
     setShowResults(true);
 
-    // Debounce search by 300ms
-    searchTimeoutRef.current = setTimeout(async () => {
-      try {
-        const results = await searchTasks(searchQuery);
-        setSearchResults(results);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Search error:', error);
-        setSearchResults([]);
-        setIsLoading(false);
-      }
-    }, 300);
-
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, [searchQuery]);
+    try {
+      const results = await searchTasks(searchQuery);
+      setSearchResults(results);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+      setIsLoading(false);
+    }
+  };
 
   // Click outside handler
   useEffect(() => {
@@ -81,7 +66,22 @@ const Navbar = () => {
 
   // Handle search input change
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    // Clear results if query is cleared
+    if (value.trim().length === 0) {
+      setSearchResults([]);
+      setShowResults(false);
+    }
+  };
+
+  // Handle key press (search on Enter)
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      performSearch();
+    }
   };
 
   // Handle clicking on a search result
@@ -126,10 +126,11 @@ const Navbar = () => {
               <input
                 className="form-control form-control-sm"
                 type="search"
-                placeholder="Search tasks..."
+                placeholder="Search tasks... (Press Enter)"
                 aria-label="Search"
                 value={searchQuery}
                 onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
               />
               {showResults && (
                 <SearchResults
