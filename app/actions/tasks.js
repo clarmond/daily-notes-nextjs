@@ -167,3 +167,34 @@ export async function getMostRecentPreviousDate() {
   // Return the date as ISO string
   return previousDayCheck.createdAt.toISOString();
 }
+
+export async function getCompletedTasksByMonth(year, month) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    return [];
+  }
+
+  const { userId } = sessionUser;
+
+  // Create start and end dates for the month
+  const startOfMonth = dayjs(`${year}-${month}-01`).startOf('month').toDate();
+  const endOfMonth = dayjs(`${year}-${month}-01`).endOf('month').toDate();
+
+  const listItems = await Task.find({
+    owner: userId,
+    is_completed: true,
+    createdAt: {
+      $gte: startOfMonth,
+      $lte: endOfMonth,
+    },
+  })
+    .sort({ createdAt: 1 })
+    .lean();
+
+  const items = listItems.map((item) => convertToSerialObject(item));
+
+  return items;
+}
