@@ -109,6 +109,16 @@ export async function deleteItem(id) {
   const result = await Task.findByIdAndDelete(id);
 }
 
+export async function updateTaskPriority(id, priority) {
+  await connectDB();
+
+  const item = await Task.findById(id);
+  if (item) {
+    item.priority = priority;
+    await item.save();
+  }
+}
+
 export async function getTasksByDate(dateString) {
   await connectDB();
 
@@ -131,7 +141,9 @@ export async function getTasksByDate(dateString) {
       $gte: startOfDay,
       $lte: endOfDay,
     },
-  }).lean();
+  })
+    .sort({ priority: 1, createdAt: 1 })
+    .lean();
 
   const items = listItems.map((item) => convertToSerialObject(item));
 

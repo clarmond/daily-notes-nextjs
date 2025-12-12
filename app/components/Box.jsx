@@ -1,10 +1,11 @@
 'use client';
 
 import BoxList from "./BoxList";
+import SortableBoxList from "./SortableBoxList";
 import dayjs from "dayjs";
 
 const Box = (props) => {
-  const { icon, title, selectedDate, onDateChange } = props.config;
+  const { icon, title, selectedDate, onDateChange, sortable } = props.config;
 
   const handleDateChange = (e) => {
     if (onDateChange) {
@@ -34,7 +35,7 @@ const Box = (props) => {
         )}
       </div>
       <div className="card-body">
-        <BoxList {...props} />
+        {sortable ? <SortableBoxList {...props} /> : <BoxList {...props} />}
       </div>
     </div>
   )
