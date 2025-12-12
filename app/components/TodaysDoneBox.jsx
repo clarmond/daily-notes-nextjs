@@ -5,7 +5,7 @@ import { FaTrophy } from "react-icons/fa";
 import { useGlobalContext } from '@/context/GlobalContext';
 
 const TodaysDoneBox = (props) => {
-    const { currentItems } = useGlobalContext();
+    const { currentItems, selectedDate, setSelectedDate } = useGlobalContext();
     const listItems = currentItems.filter(item => item.is_completed === true);
     const config = {
         title: 'Today\'s Accomplishments and Notes',
@@ -15,6 +15,8 @@ const TodaysDoneBox = (props) => {
         showTimestamps: false,
         defaultChecked: true,
         action: 'saveNote',
+        selectedDate: selectedDate,
+        onDateChange: setSelectedDate
     }
     return (
         <Box config={config} listItems={listItems} />

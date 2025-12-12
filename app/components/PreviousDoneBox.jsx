@@ -6,7 +6,7 @@ import Box from "./Box";
 import { FaCalendarCheck } from "react-icons/fa";
 
 const PreviousDoneBox = (props) => {
-  const { previousItems } = useGlobalContext();
+  const { previousItems, previousDate, setPreviousDate } = useGlobalContext();
   const listItems = previousItems;
 
   const config = {
@@ -16,6 +16,8 @@ const PreviousDoneBox = (props) => {
     sortable: false,
     showTimestamps: true,
     defaultChecked: true,
+    selectedDate: previousDate,
+    onDateChange: setPreviousDate
   };
   return <Box config={config} listItems={listItems} />;
 };

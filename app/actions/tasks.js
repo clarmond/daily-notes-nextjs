@@ -6,6 +6,7 @@ import { convertToSerialObject } from "@/utils/convertToObject";
 import { getSessionUser } from "@/utils/getSessionUser";
 import connectDB from "@/config/db";
 import Task from "@/models/Task";
+import dayjs from "dayjs";
 
 const startOfToday = new Date();
 startOfToday.setHours(0, 0, 0, 0);
@@ -107,4 +108,62 @@ export async function deleteItem(id) {
   await connectDB();
 
   const result = await Task.findByIdAndDelete(id);
+}
+
+export async function getTasksByDate(dateString) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    return [];
+  }
+
+  const { userId } = sessionUser;
+
+  // Parse the date and create start/end boundaries
+  const selectedDate = dayjs(dateString);
+  const startOfDay = selectedDate.startOf('day').toDate();
+  const endOfDay = selectedDate.endOf('day').toDate();
+
+  const listItems = await Task.find({
+    owner: userId,
+    createdAt: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+  }).lean();
+
+  const items = listItems.map((item) => convertToSerialObject(item));
+
+  return items;
+}
+
+export async function getMostRecentPreviousDate() {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    return null;
+  }
+
+  const { userId } = sessionUser;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const previousDayCheck = await Task.findOne({
+    owner: userId,
+    createdAt: {
+      $lt: today,
+    },
+  }).sort({ createdAt: -1 });
+
+  if (!previousDayCheck) {
+    return null;
+  }
+
+  // Return the date as ISO string
+  return previousDayCheck.createdAt.toISOString();
 }

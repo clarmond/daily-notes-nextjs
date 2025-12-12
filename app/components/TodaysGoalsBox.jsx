@@ -5,7 +5,7 @@ import { FaList } from 'react-icons/fa';
 import { useGlobalContext } from '@/context/GlobalContext';
 
 const TodaysGoalsBox = (props) => {
-  const { currentItems } = useGlobalContext();
+  const { currentItems, selectedDate, setSelectedDate } = useGlobalContext();
   const listItems = currentItems.filter(item => item.is_completed === false);
   const config = {
     title: 'Today\'s Tasks and Goals',
@@ -14,7 +14,9 @@ const TodaysGoalsBox = (props) => {
     sortable: true,
     showTimestamps: false,
     defaultChecked: false,
-    action: 'saveNew'
+    action: 'saveNew',
+    selectedDate: selectedDate,
+    onDateChange: setSelectedDate
   };
   return (
     <Box config={config} listItems={listItems} />
