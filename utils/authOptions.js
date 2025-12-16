@@ -22,6 +22,17 @@ export const authOptions = {
     maxAge: 90 * 24 * 60 * 60, // 90 days in seconds
     updateAge: 24 * 60 * 60, // Extend session every 24 hours of activity
   },
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true // Always use secure cookies in production
+      }
+    }
+  },
   callbacks: {
     // Invoked on successful signin
     async signIn({ profile }) {
@@ -45,11 +56,20 @@ export const authOptions = {
     },
     // Modifies the session object
     async session({ session }) {
-      // 1. Get user from database
-      const user = await User.findOne({ email: session.user.email });
-      // 2. Assign the user id to the session
-      session.user.id = user._id.toString();
-      // 3. return session
+      try {
+        // 1. Connect to database (reuses existing connection if available)
+        await connectDB();
+        // 2. Get user from database
+        const user = await User.findOne({ email: session.user.email });
+        // 3. Assign the user id to the session
+        if (user) {
+          session.user.id = user._id.toString();
+        }
+      } catch (error) {
+        console.error("Session callback error:", error);
+        // Return session even if DB lookup fails to prevent logout
+      }
+      // 4. return session
       return session;
     },
   },
