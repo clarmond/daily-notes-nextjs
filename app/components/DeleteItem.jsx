@@ -2,10 +2,11 @@
 import { useGlobalContext } from "@/context/GlobalContext";
 import { FaTrash } from "react-icons/fa";
 
-const DeleteItem = ({ id }) => {
-    const { setCurrentId } = useGlobalContext();
+const DeleteItem = ({ id, action }) => {
+    const { setCurrentId, setTaskType } = useGlobalContext();
     function setId() {
         setCurrentId(id);
+        setTaskType(action === "saveBackburner" ? "backburner" : "regular");
     }
     return (
         <div className="align-self-end">

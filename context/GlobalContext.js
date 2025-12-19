@@ -11,6 +11,7 @@ export function GlobalProvider({ children }) {
   const [previousItems, setPreviousItems] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentId, setCurrentId] = useState(0);
+  const [taskType, setTaskType] = useState("regular"); // "regular" or "backburner"
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [previousDate, setPreviousDate] = useState(null);
 
@@ -87,6 +88,8 @@ export function GlobalProvider({ children }) {
         setIsLoaded,
         currentId,
         setCurrentId,
+        taskType,
+        setTaskType,
         selectedDate,
         setSelectedDate,
         previousDate,

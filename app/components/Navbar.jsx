@@ -114,6 +114,14 @@ const Navbar = () => {
             Dashboard
           </Link>
           <Link
+            href="/backburner"
+            className={`nav-link ${
+              pathname === "/backburner" ? "active fw-bold" : ""
+            }`}
+          >
+            Backburner
+          </Link>
+          <Link
             href="/reports"
             className={`nav-link ${
               pathname === "/reports" ? "active fw-bold" : ""

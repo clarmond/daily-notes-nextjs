@@ -2,15 +2,21 @@
 
 import { useGlobalContext } from "@/context/GlobalContext";
 import { deleteItem } from "../actions/tasks";
+import { deleteBackburnerItem } from "../actions/backburnerTasks";
 
-const DeleteModal = () => {
-    const { currentId, currentItems, setCurrentItems } = useGlobalContext();
+const DeleteModal = ({ backburnerItems, setBackburnerItems }) => {
+    const { currentId, currentItems, setCurrentItems, taskType } = useGlobalContext();
 
     async function deleteAction() {
-        await deleteItem(currentId);
-
-        const updatedItems = [...currentItems].filter(item => item._id != currentId);
-        setCurrentItems(updatedItems);
+        if (taskType === "backburner") {
+            await deleteBackburnerItem(currentId);
+            const updatedItems = [...backburnerItems].filter(item => item._id != currentId);
+            setBackburnerItems(updatedItems);
+        } else {
+            await deleteItem(currentId);
+            const updatedItems = [...currentItems].filter(item => item._id != currentId);
+            setCurrentItems(updatedItems);
+        }
     }
 
     return (
