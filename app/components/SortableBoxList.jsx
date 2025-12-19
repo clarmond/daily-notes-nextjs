@@ -81,7 +81,8 @@ const SortableBoxList = (props) => {
               onDragEnd={handleDragEnd}
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, index)}
-              style={{ cursor: 'move', listStyle: 'none' }}
+              className="list-group-item lighter"
+              style={{ cursor: 'move' }}
             >
               <ListItem
                 id={item._id}
@@ -91,6 +92,7 @@ const SortableBoxList = (props) => {
                 showTimestamps={showTimestamps}
                 timestamp={item.createdAt}
                 note={item.is_note}
+                noWrapper={true}
               />
             </li>
           );

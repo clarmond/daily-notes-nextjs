@@ -57,5 +57,79 @@ export async function updateBackburnerCompletion(id, isComplete) {
 export async function deleteBackburnerItem(id) {
   await connectDB();
 
-  const result = await BackburnerTask.findByIdAndDelete(id);
+  await BackburnerTask.findByIdAndDelete(id);
+}
+
+export async function moveToBackburner(taskId) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    throw new Error("User ID is required");
+  }
+
+  const { userId } = sessionUser;
+
+  // Import Task model dynamically to avoid circular dependencies
+  const Task = (await import("@/models/Task")).default;
+
+  // Find the regular task
+  const task = await Task.findById(taskId);
+
+  if (!task) {
+    throw new Error("Task not found");
+  }
+
+  // Create a new backburner task with the same data
+  const backburnerTask = new BackburnerTask({
+    owner: userId,
+    text: task.text,
+    is_completed: task.is_completed,
+  });
+
+  const savedTask = await backburnerTask.save();
+
+  // Delete the original task
+  await Task.findByIdAndDelete(taskId);
+
+  return convertToSerialObject(savedTask.toObject());
+}
+
+export async function moveToRegular(backburnerTaskId) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    throw new Error("User ID is required");
+  }
+
+  const { userId } = sessionUser;
+
+  // Import Task model dynamically to avoid circular dependencies
+  const Task = (await import("@/models/Task")).default;
+
+  // Find the backburner task
+  const backburnerTask = await BackburnerTask.findById(backburnerTaskId);
+
+  if (!backburnerTask) {
+    throw new Error("Backburner task not found");
+  }
+
+  // Create a new regular task with the same data
+  const task = new Task({
+    owner: userId,
+    text: backburnerTask.text,
+    is_completed: backburnerTask.is_completed,
+    is_note: false,
+    priority: 0,
+  });
+
+  const savedTask = await task.save();
+
+  // Delete the original backburner task
+  await BackburnerTask.findByIdAndDelete(backburnerTaskId);
+
+  return convertToSerialObject(savedTask.toObject());
 }
