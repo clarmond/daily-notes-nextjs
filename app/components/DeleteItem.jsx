@@ -12,7 +12,7 @@ const DeleteItem = ({ id, action }) => {
         <div className="align-self-end">
             <button
                 aria-label="Remove this item"
-                className="btn btn-danger"
+                className="btn btn-danger btn-sm"
                 data-bs-toggle="modal" data-bs-target="#ConfirmDeleteModal"
                 onClick={setId}
             >
