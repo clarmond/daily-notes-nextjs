@@ -84,7 +84,11 @@ All database operations use Next.js Server Actions:
 
 - `config/db.js` implements singleton connection pattern
 - Maintains `connected` flag to prevent duplicate connections
-- Uses `MONGODB_URI` from environment variables
+- Uses environment-based database URIs:
+  - `MONGODB_URI_PRODUCTION` - Production database (daily_tasks)
+  - `MONGODB_URI_DEVELOPMENT` - Development database (daily_tasks_dev)
+- Selects connection string based on `NODE_ENV` environment variable
+- Logs which database environment is connected on startup
 
 ## Key Implementation Details
 
@@ -98,13 +102,24 @@ All database operations use Next.js Server Actions:
 
 Required in `.env`:
 ```
-MONGODB_URI=<MongoDB connection string>
+# Database Configuration
+MONGODB_URI_PRODUCTION=<MongoDB connection string for production>
+MONGODB_URI_DEVELOPMENT=<MongoDB connection string for development>
+NODE_ENV=development  # or 'production'
+
+# Authentication
 GOOGLE_CLIENT_ID=<Google OAuth client ID>
 GOOGLE_CLIENT_SECRET=<Google OAuth client secret>
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_URL_INTERNAL=http://localhost:3000
 NEXTAUTH_SECRET=<NextAuth session encryption secret>
 ```
+
+**Database Setup**: The application uses separate databases for development and production:
+- Production: `daily_tasks` database (contains real user data)
+- Development: `daily_tasks_dev` database (empty copy for testing)
+- Set `NODE_ENV=development` for local development
+- Set `NODE_ENV=production` for production deployment
 
 ## Known Technical Debt
 

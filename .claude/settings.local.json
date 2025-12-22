@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(git -C /Users/chad/code/daily-notes-nextjs log --oneline)"
     ]
   }
 }
