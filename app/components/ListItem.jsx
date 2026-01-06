@@ -40,21 +40,22 @@ const ListItem = ({ id, defaultChecked, editable, text, note, showTimestamps, ti
     const content = (
         <>
             <div className="d-flex align-items-center">
-                <div className="w-100">
-                    {note === true &&
-                        <FaStickyNote />
-                    }
-                    {note !== true &&
-                        <input
-                            id={checkboxID}
-                            type="checkbox"
-                            defaultChecked={defaultChecked}
-                            disabled={!editable}
-                            onChange={markAsComplete}
-                        />
-                    }
-                    &nbsp;
-                    <label htmlFor={checkboxID}>{text}</label>
+                <div className="d-flex align-items-start w-100 pe-2">
+                    <span className="flex-shrink-0 me-2">
+                        {note === true &&
+                            <FaStickyNote />
+                        }
+                        {note !== true &&
+                            <input
+                                id={checkboxID}
+                                type="checkbox"
+                                defaultChecked={defaultChecked}
+                                disabled={!editable}
+                                onChange={markAsComplete}
+                            />
+                        }
+                    </span>
+                    <label htmlFor={checkboxID} className="flex-grow-1">{text}</label>
                 </div>
                 {editable && (
                     <div className="d-flex gap-2">
