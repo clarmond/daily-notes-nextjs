@@ -11,8 +11,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <GlobalProvider>
-      <ToastProvider>
+    <ToastProvider>
+      <GlobalProvider>
         <AuthProvider>
           <html lang="en">
           <head>
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
           </body>
         </html>
         </AuthProvider>
-      </ToastProvider>
-    </GlobalProvider>
+      </GlobalProvider>
+    </ToastProvider>
   );
 }
