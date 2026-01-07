@@ -109,6 +109,36 @@ export async function deleteItem(id) {
   const result = await Task.findByIdAndDelete(id);
 }
 
+export async function updateTaskText(id, newText) {
+  await connectDB();
+
+  const sessionUser = await getSessionUser();
+
+  if (!sessionUser || !sessionUser.userId) {
+    throw new Error("User must be authenticated");
+  }
+
+  const trimmedText = newText.trim();
+  if (!trimmedText) {
+    throw new Error("Task text cannot be empty");
+  }
+
+  const item = await Task.findById(id);
+
+  if (!item) {
+    throw new Error("Task not found");
+  }
+
+  if (item.owner.toString() !== sessionUser.userId) {
+    throw new Error("Unauthorized to update this task");
+  }
+
+  item.text = trimmedText;
+  await item.save();
+
+  return convertToSerialObject(item);
+}
+
 export async function updateTaskPriority(id, priority) {
   await connectDB();
 
