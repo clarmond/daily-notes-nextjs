@@ -31,7 +31,7 @@ export async function saveNewTask(text, is_completed = false, is_note = false) {
   task.is_note = is_note;
   const results = await task.save();
 
-  return JSON.stringify(results);
+  return convertToSerialObject(results.toObject());
 }
 
 export async function getCurrentTasks() {
@@ -100,7 +100,9 @@ export async function updateCompletion(id, isComplete) {
 
   const item = await Task.findById(id);
   item.is_completed = isComplete;
-  item.save();
+  await item.save();
+
+  return convertToSerialObject(item.toObject());
 }
 
 export async function deleteItem(id) {
@@ -136,7 +138,7 @@ export async function updateTaskText(id, newText) {
   item.text = trimmedText;
   await item.save();
 
-  return convertToSerialObject(item);
+  return convertToSerialObject(item.toObject());
 }
 
 export async function updateTaskPriority(id, priority) {
@@ -146,6 +148,7 @@ export async function updateTaskPriority(id, priority) {
   if (item) {
     item.priority = priority;
     await item.save();
+    return convertToSerialObject(item.toObject());
   }
 }
 
