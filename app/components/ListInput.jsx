@@ -13,7 +13,7 @@ const ListInput = ({ placeholder, action, backburnerItems, setBackburnerItems })
       if (action === "saveBackburner") {
         // Handle backburner tasks
         const results = await saveNewBackburnerTask(e.target.value, false);
-        const updatedItems = [...backburnerItems, JSON.parse(results)];
+        const updatedItems = [...backburnerItems, results];
         setBackburnerItems(updatedItems);
         e.target.value = "";
       } else {
@@ -25,7 +25,7 @@ const ListInput = ({ placeholder, action, backburnerItems, setBackburnerItems })
           is_note = true;
         }
         const results = await saveNewTask(e.target.value, is_completed, is_note);
-        const updatedItems = [...currentItems, JSON.parse(results)];
+        const updatedItems = [...currentItems, results];
         setCurrentItems(updatedItems);
         e.target.value = "";
       }
