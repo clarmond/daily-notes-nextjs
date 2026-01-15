@@ -85,6 +85,8 @@ export async function getPreviousTasks() {
   previousDayEnd.setHours(23, 59, 59, 999);
 
   const listItems = await Task.find({
+    owner: userId,
+    is_completed: true,
     createdAt: {
       $gte: previousDayStart,
       $lt: previousDayEnd,

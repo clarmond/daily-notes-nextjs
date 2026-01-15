@@ -24,7 +24,8 @@ const PreviousDoneBox = (props) => {
     );
   }
 
-  const listItems = previousItems;
+  // Filter to only show completed tasks
+  const listItems = previousItems.filter(item => item.is_completed);
 
   const config = {
     title: "Previous Accomplishments and Notes",
