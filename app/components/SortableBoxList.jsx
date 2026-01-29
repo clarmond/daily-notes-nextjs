@@ -6,6 +6,7 @@ import { useToast } from '@/context/ToastContext';
 import ListItem from "./ListItem";
 import ListInput from "./ListInput";
 import { updateTaskPriority, getTasksByDate } from '@/app/actions/tasks';
+import { FaGripVertical } from "react-icons/fa";
 import dayjs from 'dayjs';
 
 const SortableBoxList = (props) => {
@@ -18,11 +19,14 @@ const SortableBoxList = (props) => {
   const handleDragStart = (e, index) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
-    e.currentTarget.style.opacity = '0.5';
+    // Set opacity on the parent <li>
+    const li = e.currentTarget.closest('li');
+    if (li) li.style.opacity = '0.5';
   };
 
   const handleDragEnd = (e) => {
-    e.currentTarget.style.opacity = '1';
+    const li = e.currentTarget.closest('li');
+    if (li) li.style.opacity = '1';
     setDraggedIndex(null);
   };
 
@@ -76,24 +80,32 @@ const SortableBoxList = (props) => {
           return (
             <li
               key={item._id}
-              draggable={true}
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragEnd={handleDragEnd}
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, index)}
-              className="list-group-item lighter"
-              style={{ cursor: 'move' }}
+              className="list-group-item lighter d-flex align-items-center"
             >
-              <ListItem
-                id={item._id}
-                text={item.text}
-                defaultChecked={defaultChecked}
-                editable={editable}
-                showTimestamps={showTimestamps}
-                timestamp={item.createdAt}
-                note={item.is_note}
-                noWrapper={true}
-              />
+              <span
+                draggable={true}
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragEnd={handleDragEnd}
+                className="flex-shrink-0 me-2 text-muted"
+                style={{ cursor: 'grab' }}
+                title="Drag to reorder"
+              >
+                <FaGripVertical />
+              </span>
+              <div className="flex-grow-1">
+                <ListItem
+                  id={item._id}
+                  text={item.text}
+                  defaultChecked={defaultChecked}
+                  editable={editable}
+                  showTimestamps={showTimestamps}
+                  timestamp={item.createdAt}
+                  note={item.is_note}
+                  noWrapper={true}
+                />
+              </div>
             </li>
           );
         })

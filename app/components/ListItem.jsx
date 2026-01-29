@@ -156,16 +156,16 @@ const ListItem = ({ id, defaultChecked, editable, text, note, showTimestamps, ti
                             onBlur={handleBlur}
                             autoFocus
                             disabled={isSaving}
+                            aria-label={text}
                         />
                     ) : (
-                        <label
-                            htmlFor={checkboxID}
+                        <span
                             className="flex-grow-1"
                             onDoubleClick={handleDoubleClick}
                             style={{ cursor: editable ? 'text' : 'default' }}
                         >
                             {text}
-                        </label>
+                        </span>
                     )}
                 </div>
                 {editable && !isEditing && (
