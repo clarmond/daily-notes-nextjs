@@ -15,7 +15,7 @@ export function GlobalProvider({ children }) {
   const [taskType, setTaskType] = useState("regular"); // "regular" or "backburner"
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [previousDate, setPreviousDate] = useState(null);
-  const [lastRefreshDate, setLastRefreshDate] = useState(null);
+  const [lastRefreshDate, setLastRefreshDate] = useState(new Date());
 
   const { showToast } = useToast();
 
@@ -84,48 +84,18 @@ export function GlobalProvider({ children }) {
   // Effect 5: Handle "first focus of the day" auto-refresh
   useEffect(() => {
     const handleFocus = async () => {
-      // Get today's date as YYYY-MM-DD string for comparison
       const todayString = dayjs().format('YYYY-MM-DD');
-      const selectedDateString = dayjs(selectedDate).format('YYYY-MM-DD');
 
-      // Only proceed if user is viewing today's date
-      if (selectedDateString !== todayString) {
-        return;
-      }
-
-      // Check if we need to refresh (new day since last focus)
+      // Check if we need to refresh (new day since last refresh)
       const lastRefreshString = lastRefreshDate
         ? dayjs(lastRefreshDate).format('YYYY-MM-DD')
         : null;
 
       if (lastRefreshString !== todayString) {
-        // It's a new day! Refresh tasks
-        setIsLoaded(false);
-
-        try {
-          // Fetch current tasks for today
-          const currentTasks = await getTasksByDate(todayString);
-          setCurrentItems(currentTasks);
-
-          // Fetch updated previous tasks
-          const recentDateString = await getMostRecentPreviousDate();
-          if (recentDateString) {
-            const newPreviousDate = new Date(recentDateString);
-            setPreviousDate(newPreviousDate);
-
-            const previousTasks = await getTasksByDate(dayjs(newPreviousDate).format('YYYY-MM-DD'));
-            setPreviousItems(previousTasks);
-          }
-
-          // Update last refresh date and show notification
-          setLastRefreshDate(new Date());
-          showToast('Refreshed to today\'s tasks', 'success');
-        } catch (error) {
-          console.error('Error refreshing tasks on focus:', error);
-          showToast('Failed to refresh tasks', 'error');
-        } finally {
-          setIsLoaded(true);
-        }
+        // It's a new day — reset to today and refresh
+        setSelectedDate(new Date());
+        setLastRefreshDate(new Date());
+        showToast('Refreshed to today\'s tasks', 'success');
       }
     };
 
@@ -136,7 +106,7 @@ export function GlobalProvider({ children }) {
     return () => {
       window.removeEventListener('focus', handleFocus);
     };
-  }, [selectedDate, lastRefreshDate, showToast, setCurrentItems, setPreviousItems, setIsLoaded, setPreviousDate]);
+  }, [lastRefreshDate, showToast]);
 
   return (
     <GlobalContext.Provider
